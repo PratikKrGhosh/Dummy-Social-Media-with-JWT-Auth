@@ -47,3 +47,11 @@ button:hover {
   background-color: var(--tertiary-color);
   box-shadow: 0 1px 2px var(--secondary-color);
 }
+
+form > p {
+  background-color: #fdbac8;
+  border-left: 3px solid var(--tertiary-color);
+  color: var(--tertiary-color);
+  padding: 0.5rem;
+  font-size: 0.8rem;
+}

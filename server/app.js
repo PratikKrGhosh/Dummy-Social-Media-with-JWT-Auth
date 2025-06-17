@@ -2,6 +2,8 @@
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
+import session from "express-session";
+import flash from "connect-flash";
 import authRouter from "./routes/auth.router.js";
 import db from "./config/db.js";
 import authMiddleware from "./middlewares/auth.middleware.js";
@@ -23,6 +25,10 @@ app.use(
 db();
 
 // creating all middlewares
+app.use(
+  session({ secret: "My-secret", resave: true, saveUninitialized: false })
+);
+app.use(flash());
 app.use(authMiddleware);
 app.use((req, res, next) => {
   res.locals.user = req.user;

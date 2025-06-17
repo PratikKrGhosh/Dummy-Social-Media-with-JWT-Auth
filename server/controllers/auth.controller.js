@@ -5,7 +5,7 @@ import { signToken } from "../utils/token.js";
 export const getSignupPage = (req, res) => {
   try {
     if (req.user) return res.status(200).redirect("/");
-    return res.status(200).render("signup");
+    return res.status(200).render("signup", { errors: req.flash("errors") });
   } catch (err) {
     return res.status(404).send("Page not Found");
   }
@@ -14,7 +14,7 @@ export const getSignupPage = (req, res) => {
 export const getLoginPage = (req, res) => {
   try {
     if (req.user) return res.status(200).redirect("/");
-    return res.status(200).render("login");
+    return res.status(200).render("login", { errors: req.flash("errors") });
   } catch (err) {
     return res.status(404).send("Page not Found");
   }
@@ -32,7 +32,10 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    if (!newUser) return res.status(400).send("Could not Create User");
+    if (!newUser) {
+      req.flash("errors", "Couldn't create user");
+      return res.redirect("/signup");
+    }
 
     return res.status(201).redirect("/login");
   } catch (err) {
@@ -46,14 +49,20 @@ export const login = async (req, res) => {
 
     const userData = await findUserbyUserName(userName);
 
-    if (!userData) return res.status(404).send("No User Exists");
+    if (!userData) {
+      req.flash("errors", "Wrong User Name or Password");
+      return res.redirect("/login");
+    }
 
     const isVerified = await verifyPassword({
       password,
       hashedPassword: userData.password,
     });
 
-    if (!isVerified) return res.status(400).json({ password: "Wrong" });
+    if (!isVerified) {
+      req.flash("errors", "Wrong User Name or Password");
+      return res.redirect("/login");
+    }
 
     const data = {
       name: userData.name,
