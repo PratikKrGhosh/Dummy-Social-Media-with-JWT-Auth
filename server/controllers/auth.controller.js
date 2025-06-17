@@ -4,6 +4,7 @@ import { signToken } from "../utils/token.js";
 
 export const getSignupPage = (req, res) => {
   try {
+    if (req.user) return res.status(200).redirect("/");
     return res.status(200).render("signup");
   } catch (err) {
     return res.status(404).send("Page not Found");
@@ -12,6 +13,7 @@ export const getSignupPage = (req, res) => {
 
 export const getLoginPage = (req, res) => {
   try {
+    if (req.user) return res.status(200).redirect("/");
     return res.status(200).render("login");
   } catch (err) {
     return res.status(404).send("Page not Found");
@@ -64,5 +66,14 @@ export const login = async (req, res) => {
     return res.status(200).redirect("/");
   } catch (err) {
     return res.status(400).send("Something went Wrong");
+  }
+};
+
+export const logout = (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    return res.status(200).redirect("/login");
+  } catch (err) {
+    return res.status(400).send("Something went wrong");
   }
 };
