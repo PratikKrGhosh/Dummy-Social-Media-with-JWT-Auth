@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/index.css" />
+    <link rel="stylesheet" href="/home.css" />
     <title>Home Page</title>
   </head>
   <body>
     <h1>Home Page</h1>
-    <h2>You are not Logged in</h2>
-    <a href="/login">log in</a>
+    <div class="details">
+      <p>User Name: <%= userName %></p>
+      <p>Name: <%= name %></p>
+      <p>Email: <%= email %></p>
+    </div>
+    <a href="/logout">log out</a>
   </body>
 </html>

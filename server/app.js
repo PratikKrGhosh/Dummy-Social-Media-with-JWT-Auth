@@ -33,7 +33,9 @@ app.use((req, res, next) => {
 app.use("/", authRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).render("index");
+  if (!req.user) return res.status(200).render("index");
+  const { userName, name, email } = req.user;
+  return res.status(200).render("home", { userName, name, email });
 });
 
 // exporting app
