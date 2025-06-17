@@ -9,3 +9,12 @@ export const createUser = async ({ name, email, userName, password }) => {
     return null;
   }
 };
+
+export const findUserbyUserName = async (userName) => {
+  try {
+    const [userData] = await User.find({ userName });
+    return userData;
+  } catch (err) {
+    return null;
+  }
+};
