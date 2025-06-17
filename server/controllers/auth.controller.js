@@ -1,5 +1,6 @@
 import { createUser, findUserbyUserName } from "../services/user.services.js";
 import { hashPassword, verifyPassword } from "../utils/hash.js";
+import { signToken } from "../utils/token.js";
 
 export const getSignupPage = (req, res) => {
   try {
@@ -52,6 +53,14 @@ export const login = async (req, res) => {
 
     if (!isVerified) return res.status(400).json({ password: "Wrong" });
 
+    const data = {
+      name: userData.name,
+      email: userData.email,
+      userName: userData.userName,
+    };
+
+    const token = await signToken(data);
+    res.cookie("access_token", token);
     return res.status(200).redirect("/");
   } catch (err) {
     return res.status(400).send("Something went Wrong");

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <h1>Home Page</h1>
+    <% if (!user) { %>
+    <h2>You are not Logged in</h2>
+    <a href="/login">click here to log in</a>
+    <% } else { %>
+    <h2>You are Logged in</h2>
+    <% } %>
+  </body>
+</html>
