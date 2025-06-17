@@ -1,4 +1,5 @@
 import { createUser, findUserbyUserName } from "../services/user.services.js";
+import { hashPassword, verifyPassword } from "../utils/hash.js";
 
 export const getSignupPage = (req, res) => {
   try {
@@ -19,7 +20,14 @@ export const getLoginPage = (req, res) => {
 export const signup = async (req, res) => {
   try {
     const { name, email, userName, password } = req.body;
-    const newUser = await createUser({ name, email, userName, password });
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await createUser({
+      name,
+      email,
+      userName,
+      password: hashedPassword,
+    });
 
     if (!newUser) return res.status(400).send("Could not Create User");
 
@@ -37,8 +45,12 @@ export const login = async (req, res) => {
 
     if (!userData) return res.status(404).send("No User Exists");
 
-    if (userData.password !== password)
-      return res.status(400).json({ password: "Wrong" });
+    const isVerified = await verifyPassword({
+      password,
+      hashedPassword: userData.password,
+    });
+
+    if (!isVerified) return res.status(400).json({ password: "Wrong" });
 
     return res.status(200).redirect("/");
   } catch (err) {
